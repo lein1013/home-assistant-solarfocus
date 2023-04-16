@@ -513,7 +513,7 @@ PELLETS_BOILER_SENSOR_TYPES = [
         state_class=SensorStateClass.MEASUREMENT,
     ),
     SensorEntityDescription(
-        key="state",
+        key="status",
         icon="mdi:fire-circle",
         device_class=SensorDeviceClass.ENUM,
         options=list(range(0, 60)) + list(range(200, 247)) + list(range(300, 345)),
