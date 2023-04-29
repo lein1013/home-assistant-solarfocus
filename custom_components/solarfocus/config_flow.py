@@ -43,12 +43,14 @@ from .const import (
 _LOGGER = logging.getLogger(__name__)
 
 SOLARFOCUS_SYSTEMS = [
-    selector.SelectOptionDict(value="Vampair", label="Heat pump vampair"),
     selector.SelectOptionDict(
-        value="Therminator", label=" Biomass boiler therminator II touch"
+        value="Vampair", label="Heat pump vampair"
     ),
     selector.SelectOptionDict(
-        value="EcoTop", label=" Biomass boiler eco top light"
+        value="Therminator", label="Biomass boiler therminator II touch"
+    ),
+    selector.SelectOptionDict(
+        value="EcoTop", label="Biomass boiler eco top light"
     ),
 ]
 
