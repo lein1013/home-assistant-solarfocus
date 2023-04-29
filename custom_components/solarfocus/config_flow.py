@@ -47,6 +47,9 @@ SOLARFOCUS_SYSTEMS = [
     selector.SelectOptionDict(
         value="Therminator", label=" Biomass boiler therminator II touch"
     ),
+    selector.SelectOptionDict(
+        value="EcoTop", label=" Biomass boiler eco top light"
+    ),
 ]
 
 # CONF_API_VERSION
