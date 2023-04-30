@@ -542,13 +542,13 @@ PELLETS_BOILER_SENSOR_TYPES = [
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
     ),
-    SensorEntityDescription(
-        key="boiler_operating_mode",
-        icon="mdi:format-list-bulleted",
-        state_class=SensorStateClass.MEASUREMENT,
-        device_class=SensorDeviceClass.ENUM,
-        options=list(range(0, 6)),
-    ),
+    # SensorEntityDescription(
+    #     key="boiler_operating_mode",
+    #     icon="mdi:format-list-bulleted",
+    #     state_class=SensorStateClass.MEASUREMENT,
+    #     device_class=SensorDeviceClass.ENUM,
+    #     options=list(range(0, 6)),
+    # ),
     SensorEntityDescription(
         key="octoplus_buffer_temperature_bottom",
         native_unit_of_measurement=UnitOfTemperature.CELSIUS,

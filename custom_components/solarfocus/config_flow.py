@@ -153,6 +153,22 @@ STEP_COMP_THERMINATOR_SELECTION_SCHEMA = vol.Schema(
     }
 )
 
+STEP_COMP_ECOTOP_SELECTION_SCHEMA = vol.Schema(
+    {
+        vol.Optional(
+            CONF_HEATING_CIRCUIT, default=1
+        ): _COMPONENT_COUNT_ZERO_EIGHT_SELECTOR,
+        vol.Optional(CONF_BUFFER, default=1): _COMPONENT_COUNT_ZERO_FOUR_SELECTOR,
+        vol.Optional(CONF_BOILER, default=1): _COMPONENT_COUNT_ZERO_FOUR_SELECTOR,
+        vol.Optional(
+            CONF_FRESH_WATER_MODULE, default=0
+        ): _COMPONENT_COUNT_ZERO_FOUR_SELECTOR,
+        vol.Optional(CONF_PELLETSBOILER, default=True): bool,
+        vol.Optional(CONF_PHOTOVOLTAIC, default=False): bool,
+        vol.Optional(CONF_SOLAR, default=False): bool,
+    }
+)
+
 
 class Solarfocus:
     """Solarfocus Configflow"""
@@ -207,7 +223,6 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
             )
 
         errors = {}
-
         try:
             await validate_input(self.hass, user_input)
         except CannotConnect:
@@ -239,6 +254,11 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     step_id="component",
                     data_schema=STEP_COMP_THERMINATOR_SELECTION_SCHEMA,
                 )
+            if self.data[CONF_SOLARFOCUS_SYSTEM] == Systems.EcoTop:
+                return self.async_show_form(
+                    step_id="component",
+                    data_schema=STEP_COMP_ECOTOP_SELECTION_SCHEMA,
+                )
 
         if self.data[CONF_SOLARFOCUS_SYSTEM] == Systems.Vampair:
             self.data[CONF_HEATPUMP] = user_input[CONF_HEATPUMP]
@@ -246,7 +266,10 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         elif self.data[CONF_SOLARFOCUS_SYSTEM] == Systems.Therminator:
             self.data[CONF_PELLETSBOILER] = user_input[CONF_PELLETSBOILER]
             self.data[CONF_HEATPUMP] = False
-
+        elif self.data[CONF_SOLARFOCUS_SYSTEM] == Systems.EcoTop:
+            self.data[CONF_PELLETSBOILER] = user_input[CONF_PELLETSBOILER]
+            self.data[CONF_HEATPUMP] = False
+            
         return self.async_create_entry(
             title=self.data[CONF_NAME],
             data={
@@ -402,7 +425,7 @@ class SolarfocusOptionsFlowHandler(config_entries.OptionsFlow):
                 }
             )
 
-        elif self.config_entry.data[CONF_SOLARFOCUS_SYSTEM] == Systems.Therminator:
+        elif self.config_entry.data[CONF_SOLARFOCUS_SYSTEM] == Systems.Therminator or self.config_entry.data[CONF_SOLARFOCUS_SYSTEM] == Systems.EcoTop:
             data_schema = vol.Schema(
                 {
                     vol.Required(
