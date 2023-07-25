@@ -1,9 +1,9 @@
 {
-    "name": "Solarfocus eco manager-touch",
+    "name": "Solarfocus eco manager-touch (fork lein1013)",
     "country": [
       "DE", "AT", "CH"
     ],
-    "homeassistant": "2023.1.2",
+    "homeassistant": "2023.7.3",
     "hacs": "1.29.1",
     "render_readme": true
 }
