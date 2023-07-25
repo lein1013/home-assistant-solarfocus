@@ -4,13 +4,13 @@
   "codeowners": ["lein1013 forked from @lavermanjj"],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://github.com/lavermanjj/home-assistant-solarfocus",
+  "documentation": "https://github.com/lein1013/home-assistant-solarfocus",
   "homekit": {},
   "integration_type": "hub",
   "iot_class": "local_polling",
-  "issue_tracker": "https://github.com/lavermanjj/home-assistant-solarfocus/issues",
-  "requirements": ["git+https://github.com/lein1013/pysolarfocus.git@qnd#pysolarfocus==3.6.8", "pymodbus==3.2.2"],
+  "issue_tracker": "https://github.com/lein1013/home-assistant-solarfocus/issues",
+  "requirements": ["git+https://github.com/lein1013/pysolarfocus.git@ecotop#pysolarfocus", "pymodbus==3.2.2"],
   "ssdp": [],
-  "version": "3.0.0-beta",
+  "version": "3.0.1-beta",
   "zeroconf": []
 }
