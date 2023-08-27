@@ -532,8 +532,8 @@
       },
       "bo_holding_mode" : {
         "state" : {
-          "0": "Always on",
-          "1": "Always off",
+          "0": "Always Off",
+          "1": "Always On",
           "2": "Monday \u2013 Sunday",
           "3": "Blockwise (Monday \u2013 Friday, Saturday \u2013 Sunday)",
           "4": "Daywise"
