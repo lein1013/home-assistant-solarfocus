@@ -220,7 +220,7 @@ HEATING_CIRCUIT_SENSOR_TYPES = [
         icon="mdi:thermometer",
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
-        entity_registry_enabled_default=False,
+        entity_registry_enabled_default=True,
     ),
     SolarfocusSensorEntityDescription(
         key="room_temperature",
@@ -292,7 +292,7 @@ BUFFER_SENSOR_TYPES = [
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         min_required_version="22.090",
-        entity_registry_enabled_default=False,
+        entity_registry_enabled_default=True,
     ),
     SolarfocusSensorEntityDescription(
         key="external_middle_temperature_x36",
@@ -301,7 +301,7 @@ BUFFER_SENSOR_TYPES = [
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
         min_required_version="22.090",
-        entity_registry_enabled_default=False,
+        entity_registry_enabled_default=True,
     ),
     SolarfocusSensorEntityDescription(
         key="external_bottom_temperature_x35",
@@ -321,7 +321,7 @@ BOILER_SENSOR_TYPES = [
         icon="mdi:thermometer-high",
         device_class=SensorDeviceClass.TEMPERATURE,
         state_class=SensorStateClass.MEASUREMENT,
-        entity_registry_enabled_default=False,
+        entity_registry_enabled_default=True,
     ),
     SolarfocusSensorEntityDescription(
         key="state",
@@ -334,7 +334,7 @@ BOILER_SENSOR_TYPES = [
         icon="mdi:format-list-bulleted",
         device_class=SensorDeviceClass.ENUM,
         options=list(range(0, 5)),
-        entity_registry_enabled_default=False,
+        entity_registry_enabled_default=True,
     ),
     SolarfocusSensorEntityDescription(
         key="single_charge",

@@ -155,7 +155,7 @@ HEATING_CIRCUIT_SELECT_TYPES = [
         key="mode",
         icon="mdi:radiator",
         entity_category=EntityCategory.CONFIG,
-        entity_registry_enabled_default=False,
+        entity_registry_enabled_default=True,
         current_option="3",
         solarfocus_options=[
             "0",
@@ -171,7 +171,7 @@ BOILER_SELECT_TYPES = [
         key="holding_mode",
         icon="mdi:water-boiler",
         entity_category=EntityCategory.CONFIG,
-        entity_registry_enabled_default=False,
+        entity_registry_enabled_default=True,
         current_option="0",
         solarfocus_options=[
             "0",
