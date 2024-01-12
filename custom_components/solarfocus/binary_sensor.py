@@ -1,28 +1,31 @@
-"""Binary Sensor for Solarfocus integration"""
+"""Binary Sensor for Solarfocus integration."""
 
 from dataclasses import dataclass
 import logging
+
+from pysolarfocus import Systems
+
 from homeassistant.components.binary_sensor import (
     BinarySensorDeviceClass,
     BinarySensorEntity,
     BinarySensorEntityDescription,
 )
-
 from homeassistant.config_entries import ConfigEntry
-
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .const import (
+    BIOMASS_BOILER_COMPONENT,
+    BIOMASS_BOILER_COMPONENT_PREFIX,
+    BIOMASS_BOILER_PREFIX,
     BUFFER_COMPONENT,
     BUFFER_COMPONENT_PREFIX,
     BUFFER_PREFIX,
+    CONF_BIOMASS_BOILER,
     CONF_BUFFER,
     CONF_HEATING_CIRCUIT,
     CONF_HEATPUMP,
-    CONF_PELLETSBOILER,
     DATA_COORDINATOR,
     DOMAIN,
     HEAT_PUMP_COMPONENT,
@@ -31,11 +34,13 @@ from .const import (
     HEATING_CIRCUIT_COMPONENT,
     HEATING_CIRCUIT_COMPONENT_PREFIX,
     HEATING_CIRCUIT_PREFIX,
-    PELLETS_BOILER_COMPONENT,
-    PELLETS_BOILER_COMPONENT_PREFIX,
-    PELLETS_BOILER_PREFIX,
 )
-from .entity import SolarfocusEntity, SolarfocusEntityDescription, create_description
+from .entity import (
+    SolarfocusEntity,
+    SolarfocusEntityDescription,
+    create_description,
+    filterVersionAndSystem,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -88,12 +93,12 @@ async def async_setup_entry(
             entity = SolarfocusBinarySensorEntity(coordinator, _description)
             entities.append(entity)
 
-    if config_entry.options[CONF_PELLETSBOILER]:
-        for description in PB_BINARY_SENSOR_TYPES:
+    if config_entry.options[CONF_BIOMASS_BOILER]:
+        for description in BIOMASS_BOILER_BINARY_SENSOR_TYPES:
             _description = create_description(
-                PELLETS_BOILER_PREFIX,
-                PELLETS_BOILER_COMPONENT,
-                PELLETS_BOILER_COMPONENT_PREFIX,
+                BIOMASS_BOILER_PREFIX,
+                BIOMASS_BOILER_COMPONENT,
+                BIOMASS_BOILER_COMPONENT_PREFIX,
                 "",
                 description,
             )
@@ -101,14 +106,14 @@ async def async_setup_entry(
             entity = SolarfocusBinarySensorEntity(coordinator, _description)
             entities.append(entity)
 
-    async_add_entities(entities)
+    async_add_entities(filterVersionAndSystem(config_entry, entities))
 
 
 @dataclass
 class SolarfocusBinarySensorEntityDescription(
     SolarfocusEntityDescription, BinarySensorEntityDescription
 ):
-    """Description of a Solarfocus binary sensor entity"""
+    """Description of a Solarfocus binary sensor entity."""
 
     on_state: str = None
 
@@ -129,26 +134,8 @@ class SolarfocusBinarySensorEntity(SolarfocusEntity, BinarySensorEntity):
     @property
     def is_on(self):
         """Return the state of the binary sensor."""
-
-        component: None
-        idx = -1
-
-        if self.entity_description.component_idx:
-            idx = int(self.entity_description.component_idx) - 1
-            component = getattr(
-                self.coordinator.api, self.entity_description.component
-            )[idx]
-        else:
-            component = getattr(self.coordinator.api, self.entity_description.component)
-
-        sensor = self.entity_description.item
-        _LOGGER.debug(
-            "Is_on - idx: %s, component: %s, sensor: %s",
-            idx,
-            self.entity_description.component,
-            sensor,
-        )
-        value = getattr(component, sensor).scaled_value
+        binary_sensor = self.entity_description.item
+        value = self._get_native_value(binary_sensor)
         on_state = self.entity_description.on_state
         state = int(value) == int(on_state)
         return state
@@ -194,10 +181,17 @@ HEATPUMP_BINARY_SENSOR_TYPES = [
     ),
 ]
 
-PB_BINARY_SENSOR_TYPES = [
+BIOMASS_BOILER_BINARY_SENSOR_TYPES = [
+    SolarfocusBinarySensorEntityDescription(
+        key="door_contact",
+        device_class=BinarySensorDeviceClass.DOOR,
+        on_state="1",
+        unsupported_systems=[Systems.ECOTOP, Systems.VAMPAIR],
+    ),
     SolarfocusBinarySensorEntityDescription(
         key="door_contact",
         device_class=BinarySensorDeviceClass.DOOR,
         on_state="0",
+        unsupported_systems=[Systems.THERMINATOR, Systems.VAMPAIR],
     ),
 ]

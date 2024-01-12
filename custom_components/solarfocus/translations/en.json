@@ -15,7 +15,7 @@
           "boiler": "Boiler",
           "heatpump": "Heat Pump",
           "photovoltaic": "Photovoltaic",
-          "pelletsboiler": "Biomass boiler",
+          "biomassboiler": "Biomass boiler",
           "solar": "Solar",
           "fresh_water_module" : "Fresh water module"
         }
@@ -43,7 +43,7 @@
           "boiler": "Boilers",
           "heatpump": "Heat pump",
           "photovoltaic": "Photovoltaic",
-          "pelletsboiler": "Biomass boiler",
+          "biomassboiler": "Biomass boiler",
           "solar" : "Solar",
           "fresh_water_module" : "Fresh water module"
         }
@@ -85,7 +85,7 @@
           "2": "Time trigger"
         }
       },
-      "pb_mode" : {
+      "bb_mode" : {
         "state" : {
           "0": "Log wood",
           "1": "Log wood automatic",
@@ -95,13 +95,13 @@
           "5": "Wood chips"
         }
       },
-      "pb_log_wood" : {
+      "bb_log_wood" : {
         "state" : {
           "0": "Begin to heat log wood / putting more wood not required / possible",
           "1": "More Log wood can be put on the fire"
         }
       },
-      "pb_state" : {
+      "bb_status" : {
         "state" : {
           "0": "Bereitschaft",
           "1": "Zündphase",
@@ -249,10 +249,10 @@
           "341": "No burner release, outside temperature",
           "342": "Buffer cylinder temperature adequate, standby",
           "343": "Differential pressure switch triggered, lag",
-          "344": "HE-rinse condensing module active"          
+          "344": "HE-rinse condensing module active"
         }
       },
-      "pb_message_number" : {
+      "bb_message_number" : {
         "state" : {
           "0": "No Message",
           "1": "Internal memory is invalid",
@@ -314,7 +314,67 @@
           "84": "Warning electrostatic dust collector",
           "85": "High voltage cable Dust collector",
           "86": "Emergency operation Differential pressure sensor",
-          "87": "Differential pressure - Boiler immediate stop"
+          "87": "Differential pressure - Boiler immediate stop",
+          "201": "Internal memory is invalid",
+          "203": "Container sensor possibly dusty",
+          "205": "Flue gas temperature too low",
+          "206": "Flue gas sensor interrupted",
+          "207": "Flue gas sensor wrong measured value",
+          "209": "Flue gas sensor short circuit",
+          "2010": "Factory settings loaded",
+          "211": "Error speed feedback",
+          "212": "Speed feedback test",
+          "213": "Speed feedback not OK",
+          "214": "Maximum suction time reached",
+          "216": "Error lambda sensor measurement",
+          "217": "Error boiler sensor",
+          "218": "Boiler temperature is too high",
+          "219": "Extraction auger is blocked",
+          "220": "First ignition attempt failed",
+          "221": "Triac filling auger defective",
+          "222": "Triac output room extraction defective",
+          "223": "Communication to electronic module interrupted",
+          "224": "Safety chain has triggered",
+          "225": "Power failure has occurred",
+          "226": "Mains fuse F3 defective",
+          "227": "Triac fuse F6 defective",
+          "230": "Feed blockage",
+          "231": "Heat exchanger is blocked",
+          "232": "Heat exchanger is blocked",
+          "233": "No feed motor current flow",
+          "235": "CAN bus interruption",
+          "236": "Fuse at fresh water module defective",
+          "237": "A fuse in the electronic module (solarmodule) is defective",
+          "238": "Commissioning settings loaded",
+          "240": "Pellet ignition fault/pellet shortage?",
+          "241": "Fuse F1 or F8 defective",
+          "242": "Shortage of pellets in storage area",
+          "243": "Fault in diverter for suction heads",
+          "244": "Kommunikationsfehler Kaskade",
+          "246": "The ash box is full and must be emptied",
+          "247": "Maintenance of the boiler recommended!",
+          "250": "Boiler door is open!",
+          "251": "Display battery is dead",
+          "252": "Limit thermostat is open",
+          "267": "Room air flap does not open",
+          "268": "Room air flap does not close",
+          "269": "Communication error with room air module",
+          "271": "No current flow heat exchanger",
+          "272": "Note: No current flow heat exchanger",
+          "273": "Fault in reference switch for suction heads",
+          "275": "Room sensor assignment",
+          "276": "Safety temperature limiter triggered",
+          "277": "Fuse F12 is defective",
+          "278": "Blockage of ash extraction",
+          "279": "No current flow ash extraction",
+          "280": "Differential pressure - Boiler stop",
+          "281": "Electrostatic dust collector offline",
+          "282": "Differential pressure - suction turbine",
+          "283": "Differential pressure - insertion",
+          "284": "Warning electrostatic dust collector",
+          "285": "High voltage cable Dust collector",
+          "286": "Emergency operation Differential pressure sensor",
+          "287": "Differential pressure - Boiler immediate stop"
           }
       },
       "bo_circulation" : {
@@ -537,6 +597,20 @@
           "2": "Monday \u2013 Sunday",
           "3": "Blockwise (Monday \u2013 Friday, Saturday \u2013 Sunday)",
           "4": "Daywise"
+        }
+      }
+    },
+    "climate": {
+      "hc_thermostat": {
+        "state_attributes": {
+          "preset_mode": {
+            "state": {
+              "comfort": "On",
+              "eco": "Reduced operation",
+              "auto": "Automatic (time setting)",
+              "off": "Off"
+            }
+          }
         }
       }
     }

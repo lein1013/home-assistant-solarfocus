@@ -1,9 +1,9 @@
-"""Selects for Solarfocus integration"""
+"""Selects for Solarfocus integration."""
 
 from __future__ import annotations
+
 from dataclasses import dataclass
 import logging
-
 
 from homeassistant.components.select import SelectEntity, SelectEntityDescription
 from homeassistant.config_entries import ConfigEntry
@@ -28,8 +28,12 @@ from .const import (
     HEATING_CIRCUIT_COMPONENT_PREFIX,
     HEATING_CIRCUIT_PREFIX,
 )
-from .entity import SolarfocusEntity, SolarfocusEntityDescription, create_description
-
+from .entity import (
+    SolarfocusEntity,
+    SolarfocusEntityDescription,
+    create_description,
+    filterVersionAndSystem,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -82,14 +86,14 @@ async def async_setup_entry(
             entity = SolarfocusSelectEntity(coordinator, _description)
             entities.append(entity)
 
-    async_add_entities(entities)
+    async_add_entities(filterVersionAndSystem(config_entry, entities))
 
 
 @dataclass
 class SolarfocusSelectEntityDescription(
     SolarfocusEntityDescription, SelectEntityDescription
 ):
-    """Description of a Solarfocus select entity"""
+    """Description of a Solarfocus select entity."""
 
     current_option: str | None = None
     # kept for compatibility reasons. Removing it would make 2022.11 the min
@@ -109,61 +113,19 @@ class SolarfocusSelectEntity(SolarfocusEntity, SelectEntity):
     ) -> None:
         """Initialize the Solarfocus select entity."""
         super().__init__(coordinator, description)
-
-        # self._attr_current_option = description.current_option
         self._attr_options = description.solarfocus_options
 
     async def async_select_option(self, option: str) -> None:
         """Update the current selected option."""
         self._attr_current_option = option
-
-        component: None
-        idx = -1
-
-        if self.entity_description.component_idx:
-            idx = int(self.entity_description.component_idx) - 1
-            component = getattr(
-                self.coordinator.api, self.entity_description.component
-            )[idx]
-        else:
-            component = getattr(self.coordinator.api, self.entity_description.component)
-
-        name = self.entity_description.item
-        _LOGGER.debug(
-            "Async_select_option - idx: %s, component: %s, sensor: %s",
-            idx,
-            self.entity_description.component,
-            name,
-        )
-        select = getattr(component, name)
-        select.set_unscaled_value(option)
-        select.commit()
-        component.update()
-
-        self.async_write_ha_state()
+        select = self.entity_description.item
+        return self._set_native_value(select, option)
 
     @property
     def current_option(self) -> str:
-        component: None
-        idx = -1
-
-        if self.entity_description.component_idx:
-            idx = int(self.entity_description.component_idx) - 1
-            component = getattr(
-                self.coordinator.api, self.entity_description.component
-            )[idx]
-        else:
-            component = getattr(self.coordinator.api, self.entity_description.component)
-
-        sensor = self.entity_description.item
-        _LOGGER.debug(
-            "Current_option - idx: %s, component: %s, sensor: %s",
-            idx,
-            self.entity_description.component,
-            sensor,
-        )
-        value = getattr(component, sensor).scaled_value
-        return str(value)
+        """Return current option."""
+        select = self.entity_description.item
+        return str(self._get_native_value(select))
 
 
 HEATPUMP_SELECT_TYPES = [
@@ -182,6 +144,7 @@ HEATING_CIRCUIT_SELECT_TYPES = [
     SolarfocusSelectEntityDescription(
         key="cooling",
         icon="mdi:snowflake",
+        entity_registry_enabled_default=False,
         current_option="0",
         solarfocus_options=[
             "0",
@@ -192,6 +155,7 @@ HEATING_CIRCUIT_SELECT_TYPES = [
         key="mode",
         icon="mdi:radiator",
         entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
         current_option="3",
         solarfocus_options=[
             "0",
@@ -207,6 +171,7 @@ BOILER_SELECT_TYPES = [
         key="holding_mode",
         icon="mdi:water-boiler",
         entity_category=EntityCategory.CONFIG,
+        entity_registry_enabled_default=False,
         current_option="0",
         solarfocus_options=[
             "0",

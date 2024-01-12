@@ -1,15 +1,12 @@
-"""Buttons for Solarfocus integration"""
+"""Buttons for Solarfocus integration."""
 
 from dataclasses import dataclass
 import logging
+
 from homeassistant.components.button import ButtonEntity, ButtonEntityDescription
-
-
 from homeassistant.config_entries import ConfigEntry
-
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
-
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator
 
 from .const import (
@@ -20,7 +17,12 @@ from .const import (
     DATA_COORDINATOR,
     DOMAIN,
 )
-from .entity import SolarfocusEntity, SolarfocusEntityDescription, create_description
+from .entity import (
+    SolarfocusEntity,
+    SolarfocusEntityDescription,
+    create_description,
+    filterVersionAndSystem,
+)
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -47,14 +49,14 @@ async def async_setup_entry(
             entity = SolarfocusButtonEntity(coordinator, _description)
             entities.append(entity)
 
-    async_add_entities(entities)
+    async_add_entities(filterVersionAndSystem(config_entry, entities))
 
 
 @dataclass
 class SolarfocusButtonEntityDescription(
     SolarfocusEntityDescription, ButtonEntityDescription
 ):
-    """Description of a Solarfocus number entity"""
+    """Description of a Solarfocus number entity."""
 
 
 class SolarfocusButtonEntity(SolarfocusEntity, ButtonEntity):
@@ -72,23 +74,8 @@ class SolarfocusButtonEntity(SolarfocusEntity, ButtonEntity):
 
     async def async_press(self) -> None:
         """Update the current value."""
-        idx = int(self.entity_description.component_idx) - 1
-        component = getattr(self.coordinator.api, self.entity_description.component)[
-            idx
-        ]
-        name = self.entity_description.item
-        _LOGGER.debug(
-            "Async_press - idx: %s, component: %s, sensor: %s",
-            idx,
-            self.entity_description.component,
-            name,
-        )
-        button = getattr(component, name)
-        button.set_unscaled_value(True)
-        button.commit()
-        component.update()
-
-        self.async_write_ha_state()
+        button = self.entity_description.item
+        return self._set_native_value(button, True)
 
 
 BOILER_BUTTON_TYPES = [
